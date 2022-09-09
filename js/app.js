@@ -1,4 +1,6 @@
 import * as THREE from "./three.module.js";
+import { GLTFLoader } from './GLTFLoader.js';
+
 // import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
 const canvas = document.getElementById('hero');
@@ -52,6 +54,23 @@ camera.position.y = 50;
 camera.position.z = 200;
 camera.lookAt(0, 50, 0);
 
+
+const loader = new GLTFLoader();
+let floatplane;
+loader.load( './floatplane1.glb', ( gltf ) => {
+
+  floatplane = gltf.scene;
+  floatplane.scale.set(2, 2, 2);
+  floatplane.position.y = 80;
+
+  floatplane.velocity = new THREE.Vector3();
+  floatplane.acceleration = new THREE.Vector3();
+  scene.add( gltf.scene );
+
+}, undefined, function ( error ) {
+  console.error( {error} );
+} );
+
 // Controls
 // const controls = new OrbitControls(camera, canvas);
 // controls.enableDamping = true;
@@ -102,3 +121,40 @@ const tick = () => {
 };
 
 tick();
+
+function sigFigs(num, fig) {
+  const orderOfMagnitude = Math.pow(10, fig);
+  return Math.floor(num * orderOfMagnitude) / orderOfMagnitude;
+}
+
+function flyFloatplane(obj, keysArr) {
+
+  // set the new acceleration based on the held down arrow keys
+  if (keysArr.includes("ArrowUp")) {
+    obj.acceleration.y = obj.acceleration.y + 0.0001;
+  }
+  if (keysArr.includes("ArrowDown")) {
+    obj.acceleration.y = obj.acceleration.y - 0.0001;
+  }
+  if (keysArr.includes("ArrowRight")) {
+    obj.acceleration.x = obj.acceleration.x + 0.0001;
+  }
+  if (keysArr.includes("ArrowLeft")) {
+    obj.acceleration.x = obj.acceleration.x - 0.0001;
+  }
+  // dampening of acceleration
+  obj.acceleration.x = sigFigs(obj.acceleration.x / 1.01, 6);
+  obj.acceleration.y = sigFigs(obj.acceleration.y / 1.01, 6);
+
+  obj.rotation.y = -sigFigs(obj.acceleration.x * -100, 4) + Math.PI;
+  obj.rotation.x =  sigFigs(obj.acceleration.y * -100, 4);
+  obj.rotation.z = Math.PI * -sigFigs(obj.acceleration.x * -50, 4);
+
+  // use the updated acceleration to set the new velocity
+  obj.velocity.x = sigFigs(obj.velocity.x / 50 + obj.acceleration.x, 4);
+  obj.velocity.y = sigFigs(obj.velocity.y / 50 + obj.acceleration.y, 4);
+
+  // use the updated velocity to set the new position
+  obj.position.x += obj.velocity.x;
+  obj.position.y += obj.velocity.y;
+}

@@ -21,10 +21,31 @@
             }
 		</style>
         <script src="./js/app.js" type="module" defer></script>
+        <script>
+            function onClick() {
+                if (typeof DeviceMotionEvent.requestPermission === 'function') {
+                    // Handle iOS 13+ devices.
+                    DeviceMotionEvent.requestPermission()
+                    .then((state) => {
+                        if (state === 'granted') {
+                        window.addEventListener('devicemotion', handleOrientation);
+                        } else {
+                        console.error('Request to access the orientation was rejected');
+                        }
+                    })
+                    .catch(console.error);
+                } else {
+                    // Handle regular non iOS 13+ devices.
+                    window.addEventListener('devicemotion', handleOrientation);
+                }
+            }
+        </script>
 	</head>
+
 	<body>
 		<canvas id="hero"></canvas>
         <section id="pitch">
+            <button onclick="onClick()">enable gyro</button>
             <h2>
                 We'll deliver your end to end web solution <br />
                 <u>on time</u> and <u>on budget</u>. When we're done, <br />
