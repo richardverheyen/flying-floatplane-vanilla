@@ -29,8 +29,10 @@
                 // console.log('foo');
                 if (event.gamma > 15) {
                     keysHeld = [...keysHeld, "ArrowRight"];
+                    window.alert("ArrowRight!");
                 } else if (event.gamma < 15) {
                     keysHeld = [...keysHeld, "ArrowLeft"];
+                    window.alert("ArrowLeft!");
                 } else {
                     keysHeld = keysHeld.filter(held => held !== "ArrowRight" || held !== "ArrowLeft");
                 }
