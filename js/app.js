@@ -1,14 +1,6 @@
 import * as THREE from "./../node_modules/three/build/three.module.js";
 // import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
-const TEXTURE_PATH = "https://res.cloudinary.com/dg5nsedzw/image/upload/v1641657168/blog/vaporwave-threejs-textures/grid.png";
-const DISPLACEMENT_PATH = "https://res.cloudinary.com/dg5nsedzw/image/upload/v1641657200/blog/vaporwave-threejs-textures/displacement.png";
-
-// Textures
-const textureLoader = new THREE.TextureLoader();
-const gridTexture = textureLoader.load(TEXTURE_PATH);
-const terrainTexture = textureLoader.load(DISPLACEMENT_PATH);
-
 const canvas = document.getElementById('hero');
 
 // Scene
@@ -18,34 +10,35 @@ const scene = new THREE.Scene();
  * Uncomment the following to add fog to the back of the 
  * scene (at 3 units of distance from the center)
  */
-// const fog = new THREE.Fog("#000000", 1, 2.5);
-// scene.fog = fog;
+const fog = new THREE.Fog("#000000", 1, 1000);
+scene.fog = fog;
 
 // Objects
-const geometry = new THREE.PlaneGeometry(1, 2, 24, 24);
-const material = new THREE.MeshStandardMaterial({
-    map: gridTexture,
-    displacementMap: terrainTexture,
-    displacementScale: 0.4,
-});
+// const geometry = new THREE.PlaneGeometry(1, 2, 24, 24);
+// const material = new THREE.MeshStandardMaterial({
+//     map: gridTexture,
+//     displacementMap: terrainTexture,
+//     displacementScale: 0.4,
+// });
 
-const plane = new THREE.Mesh(geometry, material);
-plane.rotation.x = -Math.PI * 0.5;
-plane.position.y = 0.0;
-plane.position.z = 0.15;
+// const plane2 = new THREE.Mesh(geometry, material);
+// plane2.rotation.x = -Math.PI * 0.5;
+// plane2.position.y = 0.0;
+// plane2.position.z = -1.85; // 0.15 - 2 (the length of the first plane)
 
-/**
- * Here we define a second plane that will be positioned "behind" the first one
- * along the z axis.
- * We reuse the same geometry and material to define this new mesh.
- */
-const plane2 = new THREE.Mesh(geometry, material);
-plane2.rotation.x = -Math.PI * 0.5;
-plane2.position.y = 0.0;
-plane2.position.z = -1.85; // 0.15 - 2 (the length of the first plane)
+// scene.add(plane2);
 
-scene.add(plane);
-scene.add(plane2);
+const geometry = new THREE.SphereGeometry( 1000, 20, 20, Math.PI, Math.PI / 6, Math.PI / 3, Math.PI / 3);
+const material = new THREE.MeshBasicMaterial( { color: 0x00ffff, wireframe: true } );
+const sphere = new THREE.Mesh( geometry, material );
+const sphere2 = new THREE.Mesh( geometry, material );
+
+sphere.rotation.z = Math.PI * 0.5;
+sphere2.rotation.z = Math.PI * 0.5;
+sphere.position.y = -1000;
+sphere2.position.y = -1000;
+scene.add( sphere );
+scene.add( sphere2 );
 
 // Light
 // Ambient Light
@@ -62,12 +55,13 @@ const sizes = {
 const camera = new THREE.PerspectiveCamera(
   75,
   sizes.width / sizes.height,
-  0.01,
-  20
+  1,
+  1000
 );
-camera.position.x = 0;
-camera.position.y = 0.06;
-camera.position.z = 1.1;
+camera.position.x = -100;
+camera.position.y = 50;
+camera.position.z = 200;
+camera.lookAt(0, 0, 0);
 
 // Controls
 // const controls = new OrbitControls(camera, canvas);
@@ -96,7 +90,7 @@ window.addEventListener("resize", () => {
 });
 
 const clock = new THREE.Clock();
-
+console.log({sphere});
 // Animate
 const tick = () => {
     const elapsedTime = clock.getElapsedTime();
@@ -104,15 +98,12 @@ const tick = () => {
     // controls.update();
 
     /**
-     * When the first plane reaches a position of z = 2
-     * we reset it to 0, its initial position
-     */
-    plane.position.z = (elapsedTime * 0.15) % 2;
-    /**
      * When the first plane reaches a position of z = 0
      * we reset it to -2, its initial position
      */
-    plane2.position.z = ((elapsedTime * 0.15) % 2) - 2;
+    // plane2.position.z = ((elapsedTime * 0.15) % 2) - 2;
+    sphere.rotation.x = -((elapsedTime * 0.15) %  Math.PI / 6) + Math.PI * 0.5 / 6;;
+    sphere2.rotation.x = -((elapsedTime * 0.15) %  Math.PI / 6) + Math.PI * 1.5 / 6;
 
     // Render
     renderer.render(scene, camera);
