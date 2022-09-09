@@ -25,6 +25,8 @@
             let keysHeld = [];
 
             function handleOrientation(event) {
+                // keysHeld = [...keysHeld, "ArrowRight"];
+                // console.log('foo');
                 if (event.gamma > 15) {
                     keysHeld = [...keysHeld, "ArrowRight"];
                 } else if (event.gamma < 15) {
@@ -33,10 +35,11 @@
                     keysHeld = keysHeld.filter(held => held !== "ArrowRight" || held !== "ArrowLeft");
                 }
 
-                document.getElementById('held').innerHTML = JSON.parse(keysHeld);
+                document.getElementById('held').innerHTML = keysHeld;
             }
 
             function onClick() {
+                // handleOrientation();
                 if (typeof DeviceMotionEvent.requestPermission === 'function') {
                     // Handle iOS 13+ devices.
                     DeviceMotionEvent.requestPermission()
@@ -58,7 +61,7 @@
 
 	<body>
 		<canvas id="hero"></canvas>
-        <div id="held"></div>
+        <div id="held">10</div>
         <section id="pitch">
             <button onclick="onClick()">enable gyro</button>
             <h2>
