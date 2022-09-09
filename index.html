@@ -30,8 +30,11 @@
                     keysHeld = [...keysHeld, "ArrowRight"];
                 } else if (event.gamma < -15) {
                     keysHeld = [...keysHeld, "ArrowLeft"];
-                } else {
-                    keysHeld = keysHeld.filter(held => held !== "ArrowRight" || held !== "ArrowLeft");
+                } 
+                
+                if (event.gamma > -15 && event.gamma < 15) {
+                    keysHeld = keysHeld.filter(held => held !== "ArrowRight");
+                    keysHeld = keysHeld.filter(held => held !== "ArrowLeft");
                 }
 
                 document.getElementById('held').innerHTML = keysHeld;
