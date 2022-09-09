@@ -22,13 +22,18 @@
 		</style>
         <script src="./js/app.js" type="module" defer></script>
         <script>
-            let alpha, beta, gamma;
+            let keysHeld = [];
 
             function handleOrientation(event) {
-                window.alert(event);
-                alpha = event.alpha;
-                beta = event.beta;
-                gamma = event.gamma;
+                if (event.gamma > 15) {
+                    keysHeld = [...keysHeld, "ArrowRight"];
+                } else if (event.gamma < 15) {
+                    keysHeld = [...keysHeld, "ArrowLeft"];
+                } else {
+                    keysHeld = keysHeld.filter(held => held !== "ArrowRight" || held !== "ArrowLeft");
+                }
+
+                document.getElementById('held').innerHTML = JSON.parse(keysHeld);
             }
 
             function onClick() {
@@ -53,6 +58,7 @@
 
 	<body>
 		<canvas id="hero"></canvas>
+        <div id="held"></div>
         <section id="pitch">
             <button onclick="onClick()">enable gyro</button>
             <h2>
