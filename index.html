@@ -31,10 +31,20 @@
                 } else if (event.gamma < -15) {
                     keysHeld = [...keysHeld, "ArrowLeft"];
                 } 
+
+                if (event.beta > 15) {
+                    keysHeld = [...keysHeld, "ArrowDown"];
+                } else if (event.beta < -15) {
+                    keysHeld = [...keysHeld, "ArrowUp"];
+                } 
                 
                 if (event.gamma > -15 && event.gamma < 15) {
                     keysHeld = keysHeld.filter(held => held !== "ArrowRight");
                     keysHeld = keysHeld.filter(held => held !== "ArrowLeft");
+                }
+                if (event.beta > -15 && event.beta < 15) {
+                    keysHeld = keysHeld.filter(held => held !== "ArrowDown");
+                    keysHeld = keysHeld.filter(held => held !== "ArrowUp");
                 }
             }
 
