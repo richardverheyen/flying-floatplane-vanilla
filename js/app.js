@@ -113,6 +113,10 @@ const tick = () => {
     sphere.rotation.x = -((elapsedTime * 0.15) %  Math.PI / 6) + Math.PI * 0.5 / 6;;
     sphere2.rotation.x = -((elapsedTime * 0.15) %  Math.PI / 6) + Math.PI * 1.5 / 6;
 
+    if (floatplane) {
+      flyFloatplane(floatplane, keysHeld);
+    }
+
     // Render
     renderer.render(scene, camera);
 
