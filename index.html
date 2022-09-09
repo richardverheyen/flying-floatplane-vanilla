@@ -26,7 +26,8 @@
 
             function handleOrientation(event) {
                 // keysHeld = [...keysHeld, "ArrowRight"];
-                // console.log('foo');
+                window.alert(event);
+
                 if (event.gamma > 15) {
                     keysHeld = [...keysHeld, "ArrowRight"];
                     window.alert("ArrowRight!");
