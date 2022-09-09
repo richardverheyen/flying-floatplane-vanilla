@@ -36,8 +36,6 @@
                     keysHeld = keysHeld.filter(held => held !== "ArrowRight");
                     keysHeld = keysHeld.filter(held => held !== "ArrowLeft");
                 }
-
-                document.getElementById('held').innerHTML = keysHeld;
             }
 
             function onClick() {
@@ -63,7 +61,6 @@
 
 	<body>
 		<canvas id="hero"></canvas>
-        <div id="held">10</div>
         <section id="pitch">
             <button onclick="onClick()">enable gyro</button>
             <h2>
