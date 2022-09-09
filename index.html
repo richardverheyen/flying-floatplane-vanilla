@@ -26,7 +26,7 @@
 
             function handleOrientation(event) {
                 // keysHeld = [...keysHeld, "ArrowRight"];
-                // window.alert(event.acceleration.x);
+                window.alert(event);
 
                 // if (event.gamma > 15) {
                 //     keysHeld = [...keysHeld, "ArrowRight"];
@@ -38,7 +38,7 @@
                 //     keysHeld = keysHeld.filter(held => held !== "ArrowRight" || held !== "ArrowLeft");
                 // }
 
-                document.getElementById('held').innerHTML = event.acceleration.x;
+                document.getElementById('held').innerHTML = event.gamma;
             }
 
             function onClick() {
@@ -48,7 +48,7 @@
                     DeviceMotionEvent.requestPermission()
                     .then((state) => {
                         if (state === 'granted') {
-                        window.addEventListener('devicemotion', handleOrientation);
+                        window.addEventListener('deviceorientation', handleOrientation);
                         } else {
                         console.error('Request to access the orientation was rejected');
                         }
@@ -56,7 +56,7 @@
                     .catch(console.error);
                 } else {
                     // Handle regular non iOS 13+ devices.
-                    window.addEventListener('devicemotion', handleOrientation);
+                    window.addEventListener('deviceorientation', handleOrientation);
                 }
             }
         </script>
